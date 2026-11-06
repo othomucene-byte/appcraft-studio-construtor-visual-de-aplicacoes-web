@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AppCraft Studio - Construtor de Software</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+  <!-- Top Bar -->
+  <header class="h-14 border-b border-slate-800 bg-slate-900/90 px-4 flex items-center justify-between z-30">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-xl bg-violet-600/20 text-violet-400 border border-violet-500/30 flex items-center justify-center font-bold">
+        <i data-lucide="layers" class="w-4 h-4"></i>
+      </div>
+      <div>
+        <h1 class="text-xs font-bold text-white flex items-center gap-1.5">
+          <span>AppCraft Studio</span>
+          <span class="text-[10px] bg-violet-500/20 text-violet-300 px-2 py-0.2 rounded-full border border-violet-500/30">Motor IA Ativo</span>
+        </h1>
+        <p class="text-[10px] text-slate-400">Criador de Software Visual & Código Limpo</p>
+      </div>
+    </div>
+
+    <!-- Center Mode Switch -->
+    <div class="flex items-center bg-slate-950 rounded-lg p-0.5 border border-slate-800">
+      <button onclick="setViewMode('visual')" id="btnViewVisual" class="px-3 py-1 rounded-md text-xs font-semibold bg-violet-600 text-white shadow transition">
+        Visual Canvas
+      </button>
+      <button onclick="setViewMode('code')" id="btnViewCode" class="px-3 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-white transition">
+        Código Fonte
+      </button>
+    </div>
+
+    <!-- Right Actions -->
+    <div class="flex items-center gap-2">
+      <button onclick="exportProject()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition">
+        <i data-lucide="download" class="w-3.5 h-3.5"></i>
+        <span>Exportar HTML</span>
+      </button>
+      <button onclick="previewInNewTab()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition">
+        <i data-lucide="play" class="w-3.5 h-3.5"></i>
+        <span>Executar App</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Workspace: Left Components, Center Canvas, Right Properties -->
+  <div class="flex-1 flex overflow-hidden">
+    
+    <!-- Left Sidebar: Components Library -->
+    <aside class="w-64 border-r border-slate-800 bg-slate-900/60 p-4 flex flex-col justify-between hidden md:flex">
+      <div class="space-y-4">
+        <div>
+          <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Blocos de Construção</h3>
+          <p class="text-[11px] text-slate-400 mb-3">Clique em um componente para adicionar à sua aplicação:</p>
+        </div>
+
+        <div class="space-y-2">
+          <button onclick="addComponent('hero')" class="w-full text-left p-2.5 rounded-xl bg-slate-950 hover:bg-slate-800/80 border border-slate-800 text-xs font-medium flex items-center gap-2.5 transition">
+            <i data-lucide="layout" class="w-4 h-4 text-violet-400"></i>
+            <div>
+              <div class="text-white font-semibold">Hero Banner</div>
+              <div class="text-[10px] text-slate-400">Título e chamada para ação</div>
+            </div>
+          </button>
+
+          <button onclick="addComponent('stats')" class="w-full text-left p-2.5 rounded-xl bg-slate-950 hover:bg-slate-800/80 border border-slate-800 text-xs font-medium flex items-center gap-2.5 transition">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-emerald-400"></i>
+            <div>
+              <div class="text-white font-semibold">Grid de Métricas</div>
+              <div class="text-[10px] text-slate-400">3 cartões KPI analíticos</div>
+            </div>
+          </button>
+
+          <button onclick="addComponent('form')" class="w-full text-left p-2.5 rounded-xl bg-slate-950 hover:bg-slate-800/80 border border-slate-800 text-xs font-medium flex items-center gap-2.5 transition">
+            <i data-lucide="edit-3" class="w-4 h-4 text-amber-400"></i>
+            <div>
+              <div class="text-white font-semibold">Formulário Interativo</div>
+              <div class="text-[10px] text-slate-400">Entrada de dados com botão</div>
+            </div>
+          </button>
+
+          <button onclick="addComponent('table')" class="w-full text-left p-2.5 rounded-xl bg-slate-950 hover:bg-slate-800/80 border border-slate-800 text-xs font-medium flex items-center gap-2.5 transition">
+            <i data-lucide="table" class="w-4 h-4 text-cyan-400"></i>
+            <div>
+              <div class="text-white font-semibold">Tabela de Dados</div>
+              <div class="text-[10px] text-slate-400">Listagem dinâmica com status</div>
+            </div>
+          </button>
+
+          <button onclick="addComponent('cta')" class="w-full text-left p-2.5 rounded-xl bg-slate-950 hover:bg-slate-800/80 border border-slate-800 text-xs font-medium flex items-center gap-2.5 transition">
+            <i data-lucide="sparkles" class="w-4 h-4 text-pink-400"></i>
+            <div>
+              <div class="text-white font-semibold">Faixa de Conversão</div>
+              <div class="text-[10px] text-slate-400">Destaque final com botão</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-center space-y-1">
+        <span class="text-[11px] text-slate-400">Total de Elementos:</span>
+        <div id="elementCount" class="text-sm font-bold text-violet-400 font-mono">3 no Canvas</div>
+      </div>
+    </aside>
+
+    <!-- Center: Interactive Preview Canvas -->
+    <main class="flex-1 flex flex-col bg-slate-950 p-4 sm:p-6 overflow-y-auto">
+      
+      <!-- Prompt Bar to modify canvas -->
+      <div class="mb-4 bg-slate-900/80 border border-slate-800 rounded-2xl p-3 flex items-center gap-3 shadow-lg">
+        <i data-lucide="sparkles" class="w-4 h-4 text-violet-400 shrink-0"></i>
+        <input 
+          type="text" 
+          id="promptBar" 
+          placeholder="Descreva o componente ou alteração que deseja adicionar..." 
+          onkeydown="if(event.key==='Enter') executeQuickPrompt()" 
+          class="w-full bg-transparent text-xs text-white placeholder-slate-500 focus:outline-none"
+        >
+        <button onclick="executeQuickPrompt()" class="px-3 py-1.5 bg-violet-600 hover:bg-violet-500 text-white rounded-xl text-xs font-semibold shrink-0">
+          Gerar Bloco
+        </button>
+      </div>
+
+      <!-- Live Canvas Container -->
+      <div id="visualCanvasContainer" class="flex-1 border border-slate-800/80 bg-slate-900/30 rounded-2xl p-4 sm:p-6 space-y-4 shadow-inner min-h-[500px]">
+        <!-- Dynamic Canvas Components -->
+      </div>
+
+      <!-- Code View Container -->
+      <div id="codeViewContainer" class="flex-1 border border-slate-800 bg-slate-900 rounded-2xl p-4 font-mono text-xs text-slate-300 overflow-x-auto hidden">
+        <pre id="codePreTag" class="whitespace-pre-wrap"></pre>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // State of created components
+    let components = [
+      { id: 1, type: 'hero', title: 'Acelere seu Próximo Produto Digital', desc: 'Construa interfaces e softwares completos sem atritos.' },
+      { id: 2, type: 'stats', kpi1: '99.9%', kpi2: '14.8k', kpi3: '< 250ms' },
+      { id: 3, type: 'cta', title: 'Pronto para Publicar?', btnText: 'Iniciar Gratuitamente' }
+    ];
+
+    let currentView = 'visual';
+
+    function renderCanvas() {
+      const container = document.getElementById('visualCanvasContainer');
+      document.getElementById('elementCount').innerText = components.length + ' no Canvas';
+
+      container.innerHTML = components.map((comp, idx) => {
+        if (comp.type === 'hero') {
+          return `
+            <div class="bg-gradient-to-br from-violet-950/40 via-slate-900 to-slate-950 border border-violet-800/40 rounded-2xl p-8 text-center relative group">
+              <button onclick="removeComponent(${idx})" class="absolute top-3 right-3 text-slate-500 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition">&times;</button>
+              <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">${comp.title}</h2>
+              <p class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto mb-6">${comp.desc}</p>
+              <button onclick="alert('Ação executada no app criado!')" class="px-5 py-2.5 bg-violet-600 hover:bg-violet-500 text-white rounded-xl text-xs font-semibold shadow-lg shadow-violet-600/30 transition">
+                Experimentar Agora
+              </button>
+            </div>
+          `;
+        }
+
+        if (comp.type === 'stats') {
+          return `
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 relative group">
+              <button onclick="removeComponent(${idx})" class="absolute -top-3 -right-3 text-slate-500 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition">&times;</button>
+              <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+                <span class="text-xs text-slate-400">Disponibilidade</span>
+                <div class="text-2xl font-bold text-emerald-400 mt-1 font-mono">${comp.kpi1}</div>
+              </div>
+              <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+                <span class="text-xs text-slate-400">Usuários Ativos</span>
+                <div class="text-2xl font-bold text-violet-400 mt-1 font-mono">${comp.kpi2}</div>
+              </div>
+              <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+                <span class="text-xs text-slate-400">Latência Média</span>
+                <div class="text-2xl font-bold text-cyan-400 mt-1 font-mono">${comp.kpi3}</div>
+              </div>
+            </div>
+          `;
+        }
+
+        if (comp.type === 'form') {
+          return `
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative group">
+              <button onclick="removeComponent(${idx})" class="absolute top-3 right-3 text-slate-500 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition">&times;</button>
+              <h3 class="font-bold text-sm text-white mb-3">Formulário de Cadastro & Contato</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                <input type="text" placeholder="Nome completo" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
+                <input type="email" placeholder="Endereço de e-mail" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
+              </div>
+              <button onclick="alert('Dados enviados!')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold">
+                Enviar Mensagem
+              </button>
+            </div>
+          `;
+        }
+
+        if (comp.type === 'table') {
+          return `
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden relative group">
+              <button onclick="removeComponent(${idx})" class="absolute top-3 right-3 text-slate-500 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition">&times;</button>
+              <div class="p-4 border-b border-slate-800 font-bold text-xs text-white">Listagem de Registros</div>
+              <div class="p-4 text-xs text-slate-400 space-y-2">
+                <div class="flex justify-between py-1 border-b border-slate-800/60"><span>Módulo Core</span><span class="text-emerald-400">Ativo</span></div>
+                <div class="flex justify-between py-1 border-b border-slate-800/60"><span>API Gateway</span><span class="text-emerald-400">Ativo</span></div>
+                <div class="flex justify-between py-1"><span>Banco de Dados</span><span class="text-emerald-400">Sincronizado</span></div>
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="bg-violet-900/20 border border-violet-800/30 rounded-2xl p-6 text-center relative group">
+            <button onclick="removeComponent(${idx})" class="absolute top-3 right-3 text-slate-500 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition">&times;</button>
+            <h3 class="text-lg font-bold text-white mb-2">${comp.title}</h3>
+            <button onclick="alert('Conversão registrada!')" class="px-4 py-2 bg-violet-600 hover:bg-violet-500 text-white rounded-xl text-xs font-bold shadow-md">
+              ${comp.btnText}
+            </button>
+          </div>
+        `;
+      }).join('');
+
+      updateCodeView();
+      lucide.createIcons();
+    }
+
+    function addComponent(type) {
+      if (type === 'hero') components.push({ id: Date.now(), type, title: 'Novo Título de Impacto', desc: 'Descreva a proposta de valor aqui.' });
+      else if (type === 'stats') components.push({ id: Date.now(), type, kpi1: '100%', kpi2: '4.8k', kpi3: '12ms' });
+      else if (type === 'form') components.push({ id: Date.now(), type });
+      else if (type === 'table') components.push({ id: Date.now(), type });
+      else components.push({ id: Date.now(), type: 'cta', title: 'Participe Hoje', btnText: 'Acessar Agora' });
+      renderCanvas();
+    }
+
+    function removeComponent(index) {
+      components.splice(index, 1);
+      renderCanvas();
+    }
+
+    function executeQuickPrompt() {
+      const input = document.getElementById('promptBar');
+      const val = input.value.trim().toLowerCase();
+      if (!val) return;
+      if (val.includes('form') || val.includes('contato')) addComponent('form');
+      else if (val.includes('tabela') || val.includes('lista')) addComponent('table');
+      else if (val.includes('métrica') || val.includes('kpi') || val.includes('grafico')) addComponent('stats');
+      else if (val.includes('cta') || val.includes('botao')) addComponent('cta');
+      else addComponent('hero');
+      input.value = '';
+    }
+
+    function setViewMode(mode) {
+      currentView = mode;
+      const visualC = document.getElementById('visualCanvasContainer');
+      const codeC = document.getElementById('codeViewContainer');
+      const btnV = document.getElementById('btnViewVisual');
+      const btnC = document.getElementById('btnViewCode');
+
+      if (mode === 'visual') {
+        visualC.classList.remove('hidden');
+        codeC.classList.add('hidden');
+        btnV.className = 'px-3 py-1 rounded-md text-xs font-semibold bg-violet-600 text-white shadow transition';
+        btnC.className = 'px-3 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-white transition';
+      } else {
+        visualC.classList.add('hidden');
+        codeC.classList.remove('hidden');
+        btnC.className = 'px-3 py-1 rounded-md text-xs font-semibold bg-violet-600 text-white shadow transition';
+        btnV.className = 'px-3 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-white transition';
+      }
+    }
+
+    function updateCodeView() {
+      const code = `<!-- App Gerado por AppCraft Studio -->
+<div class="max-w-4xl mx-auto p-6 space-y-6 font-sans">
+${components.map(c => '  <!-- Bloco: ' + c.type + ' -->').join('\n')}
+</div>`;
+      document.getElementById('codePreTag').innerText = code;
+    }
+
+    function exportProject() {
+      const blob = new Blob([document.getElementById('visualCanvasContainer').innerHTML], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'meu-software-app.html';
+      a.click();
+    }
+
+    function previewInNewTab() {
+      const w = window.open('', '_blank');
+      w.document.write('<!DOCTYPE html><html><head><script src="https://cdn.tailwindcss.com"></script></head><body class="bg-slate-950 text-white p-6">' + document.getElementById('visualCanvasContainer').innerHTML + '</body></html>');
+    }
+
+    renderCanvas();
+  </script>
+</body>
+</html>
